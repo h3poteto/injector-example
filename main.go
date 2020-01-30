@@ -60,18 +60,23 @@ func main() {
 	}
 }
 
-func annotatePodMutator(_ context.Context, obj metav1.Object) (bool, error) {
+func annotatePodMutator(_ context.Context, obj metav1.Object) (stop bool, err error) {
 	pod, ok := obj.(*corev1.Pod)
 
 	if !ok {
 		return false, nil
 	}
 
-	if pod.Annotations == nil {
-		pod.Annotations = make(map[string]string)
+	if pod.Annotations["h3poteto.dev.fluentd-sidecar-injection"] != "true" {
+		return false, nil
 	}
-	pod.Annotations["mutated"] = "true"
-	pod.Annotations["mutator"] = "pod-annotate"
+
+	sidecar := corev1.Container{
+		Name:  "fluentd-sidecar",
+		Image: "fluent/fluentd:v1.9.0-1.0",
+	}
+
+	pod.Spec.Containers = append(pod.Spec.Containers, sidecar)
 
 	return false, nil
 }
