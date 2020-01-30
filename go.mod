@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/slok/kubewebhook v0.3.1-0.20190629081434-39d333848d11
-	golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7 // indirect
 	k8s.io/api v0.0.0
 	k8s.io/apimachinery v0.0.0
 )
